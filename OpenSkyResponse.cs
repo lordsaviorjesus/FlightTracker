@@ -1,8 +1,10 @@
-﻿namespace flight_tracker
+﻿using System.Text.Json;
+
+namespace flight_tracker
 {
     public class OpenSkyResponse
     {
         public long time { get; set; }
-        public List<List<object>> states { get; set; }
+        public JsonElement[][] states { get; set; }
     }
 }

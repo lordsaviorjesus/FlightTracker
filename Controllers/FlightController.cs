@@ -9,15 +9,14 @@ namespace flight_tracker.Controllers
         [HttpGet]
         public IActionResult GetFlightData()
         {
-            var flightDataFetcher = new FlightData();
+            FlightData flightDataFetcher = new FlightData();
             OpenSkyResponse data = flightDataFetcher.getFlightData();
             List<FlightRecord> flightRecords = flightDataFetcher.convertFlightRecords(data);
+            //flightDataFetcher.debugToConsole(flightRecords); 
+            flightDataFetcher.UploadFlights(flightRecords);
 
-            flightDataFetcher.debugToConsole(flightRecords); // test debug to console
-            //DEBUG works !!
-
-            //todo: get into DB
-
+            
+            
             return Ok(data);
         }
     }

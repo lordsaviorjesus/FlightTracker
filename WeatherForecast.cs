@@ -1,5 +1,5 @@
 namespace flight_tracker
-//default
+//default, not used
 {
     public class WeatherForecast
     {
