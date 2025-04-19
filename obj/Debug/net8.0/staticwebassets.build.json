@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "F8IBeER4jQ6LSa/Z1shMYohUH2aWiicgy0xm6SV4kLs=",
+  "Source": "flight_tracker",
+  "BasePath": "_content/flight_tracker",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
