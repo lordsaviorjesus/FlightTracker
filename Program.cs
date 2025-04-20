@@ -1,5 +1,8 @@
 
 using flight_tracker;
+using flight_tracker.Data;
+using flight_tracker.Service;
+using flight_tracker.Service.ServiceInterface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddDbContext<AppDbContext>(); //error
+builder.Services.AddScoped<IFlightData, FlightData>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

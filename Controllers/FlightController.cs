@@ -1,23 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace flight_tracker.Controllers
-{
+﻿using flight_tracker.Data;
+using flight_tracker.EfCore;
+using flight_tracker.Service;
+using flight_tracker.Service.ServiceInterface;
+using Microsoft.AspNetCore.Mvc;
+namespace flight_tracker.Controllers {
     [ApiController]
     [Route("api/[controller]")]
-    public class FlightController : Controller
-    {
-        [HttpGet]
-        public IActionResult GetFlightData()
+    public class FlightController : ControllerBase {
+
+        private readonly IFlightData _flightData;
+
+        public FlightController(IFlightData flightData)
         {
-            FlightData flightDataFetcher = new FlightData();
-            OpenSkyResponse data = flightDataFetcher.getFlightData();
-            List<FlightRecord> flightRecords = flightDataFetcher.convertFlightRecords(data);
-            //flightDataFetcher.debugToConsole(flightRecords); 
-            flightDataFetcher.UploadFlights(flightRecords);
+            _flightData = flightData;
+        }
+
+        [HttpGet]
+        public OpenskyRecords GetFlightData() {
+            var result = _flightData.getFlightData();
+
+            return result;
+                
+        }
+        [HttpPost("seed database")]
+        public bool SetFlightData() {
 
             
-            
-            return Ok(data);
+            return true;
         }
     }
 }

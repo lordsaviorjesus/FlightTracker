@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("flight_tracker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+081dfafbefe49e5940038a433404eaee192d183f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6b8ad27947abe2b39c56c45f81103096a4c96b0f")]
 [assembly: System.Reflection.AssemblyProductAttribute("flight_tracker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("flight_tracker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

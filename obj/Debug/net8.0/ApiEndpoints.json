@@ -7,19 +7,29 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "flight_tracker.EfCore.OpenskyRecords",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
-    "ContainingType": "flight_tracker.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
-    "HttpMethod": "GET",
+    "ContainingType": "flight_tracker.Controllers.FlightController",
+    "Method": "SetFlightData",
+    "RelativePath": "api/Flight/seed database",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[flight_tracker.WeatherForecast, flight_tracker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Boolean",
         "MediaTypes": [
           "text/plain",
           "application/json",

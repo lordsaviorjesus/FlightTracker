@@ -1,14 +1,72 @@
 ﻿using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Runtime.CompilerServices;
-namespace flight_tracker
+using Microsoft.EntityFrameworkCore;
+using flight_tracker.Data;
+using flight_tracker.EfCore;
+using flight_tracker.Service.ServiceInterface;
+namespace flight_tracker.Service
 {
+    public class FlightData : IFlightData
+    {
+        private readonly AppDbContext _context;
+
+        public FlightData(AppDbContext context)
+        {
+            _context = context;
+        }
+
+
+        public OpenskyRecords getFlightData()
+        {
+            using (var client = new HttpClient())
+            {
+                //FYI: 2k requests per day w/o sign in, 4k req w/ api key registration
+                var endpoint = new Uri("https://opensky-network.org/api/states/all?lamin=45.8389&lomin=5.9962&lamax=47.8229&lomax=10.5226");
+                var result = client.GetAsync(endpoint).Result;
+                var json = result.Content.ReadAsStringAsync().Result;
+                var data = JsonSerializer.Deserialize<OpenskyRecords>(json);
+
+                //custom 
+                var flightRecords = data.states.Select(state => new FlightRecord_ef
+                {
+                    Id = Guid.NewGuid(),
+                    icao24 = state[0].GetString(),
+                    callsign = state[1].GetString()?.Trim(),
+                    origincountry = state[2].GetString(),
+                    timeposition = state[3].ValueKind != JsonValueKind.Null ? state[3].GetInt64() : (long?)null,
+                    lastcontact = state[4].ValueKind != JsonValueKind.Null ? state[4].GetInt64() : (long?)null,
+                    longitude = state[5].ValueKind != JsonValueKind.Null ? state[5].GetDouble() : (double?)null,
+                    latitude = state[6].ValueKind != JsonValueKind.Null ? state[6].GetDouble() : (double?)null,
+                    baroaltitude = state[7].ValueKind != JsonValueKind.Null ? state[7].GetDouble() : (double?)null,
+                    onground = state[8].ValueKind != JsonValueKind.Null ? state[8].GetBoolean() : (bool?)null,
+                    velocity = state[9].ValueKind != JsonValueKind.Null ? state[9].GetDouble() : (double?)null,
+                }).ToList();
+
+                _context.Flights.AddRange(flightRecords);
+                _context.SaveChangesAsync();
+
+
+                return data;
+            }
+        }
+
+    }
+
+    /*
     public class FlightData
     {
-        protected readonly string connectionString = "Host=localhost; Database=flightDB; Username=postgres; Password=55628";
-        public OpenSkyResponse getFlightData() {
+        private readonly AppDbContext _context;
+        public FlightData(AppDbContext context)
+        {
+            _context = context;
+
+        }
+        public OpenSkyResponse getFlightData()
+        {
             using (var client = new HttpClient())
             {
                 //FYI: 2k requests per day w/o sign in, 4k req w/ api key registration
@@ -20,7 +78,8 @@ namespace flight_tracker
                 return data;
             }
         }
-        public List<FlightRecord> convertFlightRecords(OpenSkyResponse data) {
+        public List<FlightRecord> convertFlightRecords(OpenSkyResponse data)
+        {
             var records = new List<FlightRecord>();
             if (data?.states == null)
             {
@@ -28,7 +87,8 @@ namespace flight_tracker
                 return new List<FlightRecord>();
             }
 
-            foreach (var s in data.states) {
+            foreach (var s in data.states)
+            {
                 FlightRecord temp = new FlightRecord();
 
 
@@ -43,7 +103,7 @@ namespace flight_tracker
                 temp.baroaltitude = s[7].ValueKind != JsonValueKind.Null ? s[7].GetDouble() : null;
                 temp.onground = s[8].ValueKind != JsonValueKind.Null ? s[8].GetBoolean() : null;
                 temp.velocity = s[9].ValueKind != JsonValueKind.Null ? s[9].GetDouble() : null;
-                d
+
                 records.Add(temp);
 
                 Console.WriteLine(temp.icao24);
@@ -60,7 +120,7 @@ namespace flight_tracker
 
 
                 records.Add(temp);
-                /*
+                
                 records.Add(new FlightRecord
                 {
                     icao24 = s[0]?.ToString(),
@@ -74,20 +134,19 @@ namespace flight_tracker
                     onground = s[8] as bool?,
                     velocity = s[9] as double?
                 });
-                */
+                
             }
             Console.WriteLine("DATA PARSED ^^^^^\n");
             Console.WriteLine("^^^^^\n");
             Console.WriteLine("^^^^^\n");
             Console.WriteLine("^^^^^\n");
 
-            debugToConsole(records); 
+            debugToConsole(records);
             return records;
         }
         public void UploadFlights(List<FlightRecord> records)
         {
-            using var conn = new NpgsqlConnection(connectionString);
-            conn.Open();
+
 
             // Ensure flight_records table exists
             string createTableQuery = @"
@@ -151,7 +210,8 @@ namespace flight_tracker
             Console.WriteLine("Upload to DB complete.");
 
         }
-        public void debugToConsole(List<FlightRecord> data){
+        public void debugToConsole(List<FlightRecord> data)
+        {
             // Loop through each flight record and print its details to the console
             foreach (var record in data)
             {
@@ -172,4 +232,5 @@ namespace flight_tracker
         }
 
     }
+    */
 }

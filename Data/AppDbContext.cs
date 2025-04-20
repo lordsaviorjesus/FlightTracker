@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using flight_tracker.EfCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace flight_tracker.Data
@@ -19,6 +20,8 @@ namespace flight_tracker.Data
             options.UseNpgsql(Configuration.GetConnectionString("WebApiDatabase"));
         }
 
-        public DbSet<Flight> Flights { get; set; }
+        public DbSet<FlightRecord_ef> Flights { get; set; } 
+
+
     }
 }
