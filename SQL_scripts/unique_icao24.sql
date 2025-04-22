@@ -1,0 +1,1 @@
+ALTER TABLE FlightRecords_EF ADD CONSTRAINT unique_icao24 UNIQUE (icao24);

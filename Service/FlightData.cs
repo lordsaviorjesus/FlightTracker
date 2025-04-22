@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using flight_tracker.Data;
 using flight_tracker.EfCore;
 using flight_tracker.Service.ServiceInterface;
+using System.Net.Mail;
 namespace flight_tracker.Service
 {
     public class FlightData : IFlightData
@@ -18,7 +19,6 @@ namespace flight_tracker.Service
         {
             _context = context;
         }
-
 
         public OpenskyRecords getFlightData()
         {
@@ -46,9 +46,18 @@ namespace flight_tracker.Service
                     velocity = state[9].ValueKind != JsonValueKind.Null ? state[9].GetDouble() : (double?)null,
                 }).ToList();
 
-                _context.Flights.AddRange(flightRecords);
-                _context.SaveChangesAsync();
 
+                //===Filtering funcs from Mr.GPT===/
+                var existingIcao24s = _context.Flights
+                    .Select(f => f.icao24)
+                    .ToHashSet();
+                var newFlights = flightRecords
+                    .Where(fr => !existingIcao24s.Contains(fr.icao24))
+                    .ToList();
+                //=================================/
+
+                _context.Flights.AddRange(newFlights);
+                _context.SaveChanges();
 
                 return data;
             }
