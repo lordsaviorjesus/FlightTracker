@@ -1,4 +1,3 @@
-
 using flight_tracker;
 using flight_tracker.Data;
 using flight_tracker.Service;
@@ -6,20 +5,22 @@ using flight_tracker.Service.ServiceInterface;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options => {   //allow react to use localhost
+    options.AddPolicy("AllowReactApp", policy => {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
 
-// Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
-builder.Services.AddDbContext<AppDbContext>(); //error
+builder.Services.AddDbContext<AppDbContext>();  //Need these two for DB
 builder.Services.AddScoped<IFlightData, FlightData>();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseCors("AllowReactApp");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -27,9 +28,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

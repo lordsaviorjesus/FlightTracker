@@ -1,7 +1,7 @@
 [
   {
     "ContainingType": "flight_tracker.Controllers.FlightController",
-    "Method": "GetFlightData",
+    "Method": "GetAll",
     "RelativePath": "api/Flight",
     "HttpMethod": "GET",
     "IsController": true,
@@ -9,7 +9,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "flight_tracker.EfCore.OpenskyRecords",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[flight_tracker.EfCore.FlightRecord_ef, flight_tracker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
