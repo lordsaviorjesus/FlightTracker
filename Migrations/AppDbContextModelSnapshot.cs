@@ -34,6 +34,9 @@ namespace flight_tracker.Migrations
                     b.Property<string>("callsign")
                         .HasColumnType("text");
 
+                    b.Property<double?>("geoaltitude")
+                        .HasColumnType("double precision");
+
                     b.Property<string>("icao24")
                         .HasColumnType("text");
 
@@ -52,10 +55,28 @@ namespace flight_tracker.Migrations
                     b.Property<string>("origincountry")
                         .HasColumnType("text");
 
+                    b.Property<int?>("positionsource")
+                        .HasColumnType("integer");
+
+                    b.Property<int[]>("sensors")
+                        .HasColumnType("integer[]");
+
+                    b.Property<bool?>("spi")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("squawk")
+                        .HasColumnType("text");
+
                     b.Property<long?>("timeposition")
                         .HasColumnType("bigint");
 
+                    b.Property<double?>("truetrack")
+                        .HasColumnType("double precision");
+
                     b.Property<double?>("velocity")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("verticalrate")
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");

@@ -9,6 +9,7 @@ using flight_tracker.Data;
 using flight_tracker.EfCore;
 using flight_tracker.Service.ServiceInterface;
 using System.Net.Mail;
+using System.Linq;
 namespace flight_tracker.Service
 {
     public class FlightData : IFlightData
@@ -44,16 +45,27 @@ namespace flight_tracker.Service
                     baroaltitude = state[7].ValueKind != JsonValueKind.Null ? state[7].GetDouble() : (double?)null,
                     onground = state[8].ValueKind != JsonValueKind.Null ? state[8].GetBoolean() : (bool?)null,
                     velocity = state[9].ValueKind != JsonValueKind.Null ? state[9].GetDouble() : (double?)null,
-                }).ToList();
+                    truetrack = state[10].ValueKind != JsonValueKind.Null ? state[10].GetDouble() : (double?)null,
+                    verticalrate = state[11].ValueKind != JsonValueKind.Null ? state[11].GetDouble() : (double?)null,
+                    sensors = state[12].ValueKind != JsonValueKind.Null ? state[12].EnumerateArray().Select(e => e.GetInt32()).ToArray() : (int[]?)null,
+                    geoaltitude = state[13].ValueKind != JsonValueKind.Null ? state[13].GetDouble() : (double?)null,
+                    squawk = state[14].ValueKind != JsonValueKind.Null ? state[14].GetString() : (string?)null,
+                    spi = state[15].ValueKind != JsonValueKind.Null ? state[15].GetBoolean() : (bool?)null,
+                    positionsource = state[16].ValueKind != JsonValueKind.Null ? state[16].GetInt32() : (int?)null,
 
+                });
 
-                //===Filtering funcs from Mr.GPT===/
+                //===Filtering funcs from Mr.GPT & Scoobert===/
                 var existingIcao24s = _context.Flights
+                    .Where(f => flightRecords.Select(f => f.icao24).Contains(f.icao24))
                     .Select(f => f.icao24)
                     .ToHashSet();
+                 //to dictionaries
+
                 var newFlights = flightRecords
                     .Where(fr => !existingIcao24s.Contains(fr.icao24))
                     .ToList();
+
                 //=================================/
 
                 _context.Flights.AddRange(newFlights);

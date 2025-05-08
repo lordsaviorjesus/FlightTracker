@@ -18,6 +18,13 @@ namespace flight_tracker.EfCore
         public double? latitude { get; set; }
         public double? baroaltitude { get; set; }
         public bool? onground { get; set; }
-        public double? velocity { get; set; }
+        public double? velocity { get; set; } 
+        public double? truetrack { get; set; }
+        public double? verticalrate { get; set; }
+        public int[]? sensors { get; set; }  //12
+        public double? geoaltitude {  get; set; }
+        public string? squawk { get; set; }
+        public bool? spi {  get; set; }
+        public int? positionsource { get; set; }
     }
 }
