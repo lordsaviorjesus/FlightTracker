@@ -21,8 +21,9 @@ namespace flight_tracker.Controllers {
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FlightRecord_ef>>> GetAll() {
-            var result = _flightData.getFlightData();
-            return Ok(result);
+            var x = _flightData.getFlightData();
+            var flights = await _context.Flights.ToListAsync();
+            return Ok(flights);
         }
 
         /*

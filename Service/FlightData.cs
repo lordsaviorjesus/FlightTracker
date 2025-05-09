@@ -70,6 +70,9 @@ namespace flight_tracker.Service
                 _context.Flights.AddRange(newFlights);
                 _context.SaveChanges();
 
+                //on change, data.getStates() gets you only the changed things from new pull openskyapi
+                //
+
                 return data.getStates();
             }
         }
