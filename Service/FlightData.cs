@@ -55,7 +55,7 @@ namespace flight_tracker.Service
 
                 });
 
-                //===Filtering funcs from Mr.GPT & Scoobert===/
+                //===Filtering funcs===/
                 var existingIcao24s = _context.Flights
                     .Where(f => flightRecords.Select(f => f.icao24).Contains(f.icao24))
                     .Select(f => f.icao24)
